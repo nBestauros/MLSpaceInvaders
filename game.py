@@ -110,6 +110,11 @@ while running:
     for invaderObj in invaderGroup.sprites():
         invaderObj.update(SCREEN_WIDTH)
 
+    for invaderObj in invaderGroup.sprites():
+        if pygame.sprite.groupcollide(laserGroup, invaderGroup, True, True):
+            points+=1
+            print("Points: " + str(points))
+
     draw_window()
 
 pygame.quit()
