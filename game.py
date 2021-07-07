@@ -115,6 +115,10 @@ while running:
             points+=1
             print("Points: " + str(points))
 
+        if invaderObj.rect.bottom>DEFENDER.bottom:
+            print("Game lost!")
+            running = False
+
     draw_window()
 
 pygame.quit()
