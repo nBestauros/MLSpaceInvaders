@@ -6,6 +6,8 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import laser
+import random
+import invader
 
 pygame.init()
 
@@ -14,9 +16,12 @@ pygame.init()
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 FPS = 60
-VELOCITY = 5
-LASERVELOCITY = -12.5
+VELOCITY = 3
+LASERVELOCITY = -12
 DEFENDERY = 400
+INVADERY = 50
+INVADERVELOCITY = 4
+SPAWN_TIMER = 2000
 
 #Colors
 WHITE = (255, 255, 255)
@@ -39,7 +44,10 @@ points = 0
 
 #Sprite Groups
 laserGroup = pygame.sprite.Group()
+invaderGroup = pygame.sprite.Group()
 
+#Pygame Custom Events
+spawn_invader_event = pygame.USEREVENT + 1
 
 
 # Set up the drawing window
@@ -53,6 +61,9 @@ def draw_window():
 
     for laserObj in laserGroup.sprites():
         pygame.draw.rect(screen, RED, laserObj)
+
+    for invaderObj in invaderGroup.sprites():
+        pygame.draw.rect(screen, BLUE, invaderObj)
 
     pygame.display.update()
 
@@ -69,17 +80,25 @@ def player_input_handler(keys, defender):
         laserObj = laser.Laser(LASERVELOCITY, defender.centerx, DEFENDERY)
         laserGroup.add(laserObj)
 
+def spawnInvader(y):
+    invaderObj = invader.Invader(INVADERVELOCITY, random.randint(0, SCREEN_WIDTH), 25)
+    invaderGroup.add(invaderObj)
 
 #Game Loop
 running = True
 clock = pygame.time.Clock()
+
+pygame.time.set_timer(spawn_invader_event, SPAWN_TIMER)
+
 while running:
     clock.tick(FPS)
-    
+
     #Event Listener
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == spawn_invader_event:
+            spawnInvader(INVADERY)
 
     #boolean list of all pressed keys
     keys = pygame.key.get_pressed()
@@ -87,6 +106,9 @@ while running:
 
     for laserObj in laserGroup.sprites():
         laserObj.update()
+
+    for invaderObj in invaderGroup.sprites():
+        invaderObj.update(SCREEN_WIDTH)
 
     draw_window()
 
