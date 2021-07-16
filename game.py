@@ -9,6 +9,10 @@ import laser
 import random
 import invader
 
+x = 0
+y = 0
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
+
 pygame.init()
 
 
@@ -70,13 +74,13 @@ def draw_window():
 
 # will move the defender left or right depending on if the left or right arrow key is pressed
 def player_input_handler(keys, defender):
-    if keys[pygame.K_LEFT] and defender.centerx - VELOCITY >0:
+    if keys[pygame.K_a] and defender.centerx - VELOCITY >0:
         defender.x -= VELOCITY
 
-    if keys[pygame.K_RIGHT] and defender.centerx + VELOCITY <SCREEN_WIDTH:
+    if keys[pygame.K_d] and defender.centerx + VELOCITY <SCREEN_WIDTH:
         defender.x += VELOCITY
 
-    if keys[pygame.K_SPACE] and len(laserGroup.sprites())==0:
+    if keys[pygame.K_w] and len(laserGroup.sprites())==0:
         laserObj = laser.Laser(LASERVELOCITY, defender.centerx, DEFENDERY)
         laserGroup.add(laserObj)
 
@@ -85,6 +89,7 @@ def spawnInvader(y):
     invaderGroup.add(invaderObj)
 
 #Game Loop
+
 running = True
 clock = pygame.time.Clock()
 
