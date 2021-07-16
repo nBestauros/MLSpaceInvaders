@@ -1,1 +1,5 @@
 pygame
+pywin32
+opencv-python
+pandas
+pillow
